@@ -19,10 +19,10 @@ class EnvironmentBase(dict):
         return os.path.join(self['home_dir'], self['conf_file'])
 
     def abs_conf_tmpl(self):
-        return os.path.join(os.environ['NETWORK_BASE_DIR'],
-                            'templates', self['conf_tmpl'])
+        return os.path.abspath(os.path.join(os.environ['NETWORK_BASE_DIR'],
+                            '../templates', self['conf_tmpl']))
 
     def set_index(self, index):
-        self.index = index
+        self['index'] = index
         self['home_dir'] = '{0}{1}'.format(self['home_dir'], index)
         

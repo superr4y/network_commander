@@ -19,8 +19,8 @@ class LxcConfException(Exception):
 
 
 class Lxc:
-    def __init__(self, config_file):
-        self.config_file = config_file
+    def __init__(self, env):
+        self.env = env
 
     @ExecuteOrNot
     def execute(self, command, **kwargs):
@@ -30,13 +30,13 @@ class Lxc:
         #cmd = [LXC_PATH+'lxc-execute', '-n', self._lxc_name(), '-f', self.config_file,
         #       '--'] + command
         cmd = '{0}lxc-execute -n {1} -f {2} -- {3}'.format(
-            LXC_PATH, self._lxc_name(), self.config_file, command)
+            LXC_PATH, self._lxc_name(), self.env.abs_conf_file(), command)
         return cmd
                     
     @ExecuteOrNot
     def attach(self, **kwargs):
         #cmd = [LXC_PATH+'lxc-attach', '-n', self._lxc_name()]
-        cmd = '{}lxc-attach -n {1}'.format(LXC_PATH, self._lxc_name())
+        cmd = '{0}lxc-attach -n {1}'.format(LXC_PATH, self._lxc_name())
         return cmd
     
     @ExecuteOrNot
@@ -69,7 +69,7 @@ class Lxc:
         'vm0'
         """
 
-        with open(self.config_file, 'r') as fd:
+        with open(self.env.abs_conf_file(), 'r') as fd:
             conf = fd.read()
         
         match = re.search(r'lxc.utsname\s+=\s+(\S+)', conf)

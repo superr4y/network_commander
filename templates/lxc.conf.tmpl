@@ -1,0 +1,13 @@
+lxc.utsname = @name
+lxc.rootfs = / 
+lxc.pts=1024
+lxc.tty=1
+lxc.console=/var/log/lxc/test@index
+
+lxc.network.type = veth 
+lxc.network.veth.pair = veth@index
+lxc.network.flags = up  
+lxc.network.link = br0 
+lxc.network.name = eth@index 
+lxc.network.ipv4 = @ip
+lxc.network.ipv4.gateway = @gw_ip
