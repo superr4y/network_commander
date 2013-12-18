@@ -17,24 +17,22 @@ class NetCatCommander:
         self._create_conf_file()
 
     def run(self, **kwargs):
-        return self.exe.listen(self.env.env['port'],
+        return self.exe.listen(self.env['port'],
                                stdout=sp.PIPE,
                                stderr=sp.STDOUT,
                                **kwargs)
 
     def _create_home_dir(self):
-        if not os.path.exists(self.env.env['home_dir']):
-            os.makedirs(self.env.env['home_dir'])
+        if not os.path.exists(self.env['home_dir']):
+            os.makedirs(self.env['home_dir'])
 
     def _create_conf_file(self):
-        loader  = FileLoader(os.path.abspath(os.path.join(
-            os.environ['NETWORK_BASE_DIR'], 'templates')))
-        template = loader.load_template(self.env.env['conf_templ'])
-        nc_conf = template.render(self.env.env)
-        with open(os.path.join(self.env.env['home_dir'],
-                  self.env.env['conf_file']), 'w') as fd:
+        loader  = FileLoader('/')
+        template = loader.load_template(self.env.abs_conf_tmpl())
+        nc_conf = template.render(self.env)
+        with open(self.env.abs_conf_file(), 'w') as fd:
             fd.write(nc_conf)
         
     def _destroy(self):
-        shutil.rmtree(self.env.env['home_dir'])
+        shutil.rmtree(self.env['home_dir'])
 

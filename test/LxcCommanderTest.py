@@ -60,7 +60,7 @@ lxc.network.ipv4.gateway = @gw_ip
         #self.nc_commander._destroy()
 
     def test_network_base_dir(self):
-        self.assertEqual(self.lxc_commander.env.env['home_dir'],
+        self.assertEqual(self.lxc_commander.env['home_dir'],
                          self.base_dir)
         self.assertTrue(os.path.exists(self.base_dir))
         
@@ -73,9 +73,9 @@ lxc.network.ipv4.gateway = @gw_ip
         with open(conf_file, 'r') as fd:
             conf_str = fd.read()
         match = re.search(r'lxc.utsname = (\S+)', conf_str)
-        self.assertEqual(match.group(1), self.lxc_commander.env.env['name'])
+        self.assertEqual(match.group(1), self.lxc_commander.env['name'])
         match = re.search(r'lxc.network.ipv4 = (\S+)', conf_str)
-        self.assertEqual(match.group(1), self.lxc_commander.env.env['ip'])
+        self.assertEqual(match.group(1), self.lxc_commander.env['ip'])
 
     def test_run(self):
         self.lxc_commander.run()
@@ -84,7 +84,7 @@ lxc.network.ipv4.gateway = @gw_ip
 
     def test_configure(self):
         self.lxc_commander.configure()
-        self.assertEqual(self.lxc_commander.commanders[0].env.env['home_dir'],
+        self.assertEqual(self.lxc_commander.commanders[0].env['home_dir'],
                           os.path.join(self.base_dir, 'netcat'))
         self.assertTrue(os.path.exists(os.path.join(self.base_dir, 'netcat')))
 

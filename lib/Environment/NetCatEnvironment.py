@@ -1,15 +1,14 @@
 #!/usr/bin/env python3
 import os
+from .EnvironmentBase import EnvironmentBase
 
-class NetCatEnvironment:
-    def __init__(self):
-        self.env = {'home_dir': os.path.join(os.path.abspath(
-            os.environ['NETWORK_BASE_DIR']), 'netcat'),
-                    'port': '6666',
-                    'conf_file': 'nc.conf',
-                    'conf_templ': 'nc.conf.tmpl'
-        }
-        
+class NetCatEnvironment(EnvironmentBase):
+    def __init__(self, *args):
+        super(NetCatEnvironment, self).__init__(
+            home_dir='netcat', conf_file='nc.conf')
+        self.update({'port': '6666'})
+        self.update(*args)
 
+            
 
     

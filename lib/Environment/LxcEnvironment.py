@@ -1,17 +1,22 @@
 #!/usr/bin/env python3
 import os
+from .EnvironmentBase  import EnvironmentBase
 
-class LxcEnvironment:
-    def __init__(self):
-        self.env = {'home_dir': os.path.join(os.path.abspath(
-            os.environ['NETWORK_BASE_DIR']), 'lxc'),
+class LxcEnvironment(EnvironmentBase):
+    def __init__(self, *args):
+        super(LxcEnvironment, self).__init__(
+            home_dir='lxc',
+            conf_file='lxc.conf')
+
+        self.update({
                     'ip': '10.0.0.2',
                     'gw_ip': '10.0.0.1',
-                    'conf_file': 'lxc.conf',
-                    'conf_templ': 'lxc.conf.tmpl',
-                    'name': 'vm0'
-        }
+                    'name': 'lxc'})
 
-    def conf_file(self):
-        return os.path.join(self.env['home_dir'], self.env['conf_file'])
-        
+        self.update(*args)
+
+    def set_index(self, index):
+        super(LxcEnvironment, self).set_index(index)
+        ip = '.'.join(self['ip'].split('.')[:3])
+        self['ip'] = '{0}.{1}'.format(ip, index+2)
+        self['name'] = '{0}{1}'.format(self['name'], index)

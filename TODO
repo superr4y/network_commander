@@ -1,1 +1,5 @@
 https://github.com/tony/tmuxp/
+# - migrade commanders to new envirionment
+- config folder with example networks (first everything in main)
+- main script with configure/run/manage ability
+

@@ -37,7 +37,7 @@ class NetCatCommanderTest(unittest.TestCase):
         #self.nc_commander._destroy()
 
     def test_network_base_dir(self):
-        self.assertEqual(self.nc_commander.env.env['home_dir'],
+        self.assertEqual(self.nc_commander.env['home_dir'],
                           self.base_dir)
         self.assertTrue(os.path.exists(self.base_dir))
 
@@ -51,7 +51,7 @@ class NetCatCommanderTest(unittest.TestCase):
         match = re.search(r'port = (\S+)', conf_str)
         self.assertEqual(match.group(1), '6666')
         match = re.search(r'home_dir = (\S+)', conf_str)
-        self.assertEqual(match.group(1), self.nc_commander.env.env['home_dir'])
+        self.assertEqual(match.group(1), self.nc_commander.env['home_dir'])
 
     def test_run(self):
         self.nc_commander.run()

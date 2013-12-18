@@ -11,13 +11,13 @@ from Wrapper.Lxc import Lxc
 class LxcCommander:
     def __init__(self, commanders, *args, **kwargs):
         self.env = LxcEnvironment()
-        self.exe = Lxc(self.env.conf_file())
+        self.exe = Lxc(self.env.abs_conf_file())
         self.commanders = commanders
 
         # e.g. /tmp/net/netcat0 => /home/net/lxc/netcat0
         for commander in self.commanders:
-            folder_name = commander.env.env['home_dir'].split('/')[-1]
-            commander.env.env['home_dir'] = os.path.join(self.env.env['home_dir'],
+            folder_name = commander.env['home_dir'].split('/')[-1]
+            commander.env['home_dir'] = os.path.join(self.env['home_dir'],
                                                          folder_name)
 
     def configure(self):
@@ -31,19 +31,17 @@ class LxcCommander:
         self.exe.execute(cmd)
 
     def _create_home_dir(self):
-        if not os.path.exists(self.env.env['home_dir']):
-            os.makedirs(self.env.env['home_dir'])
+        if not os.path.exists(self.env['home_dir']):
+            os.makedirs(self.env['home_dir'])
 
     def _create_conf_file(self):
-        loader  = FileLoader(os.path.abspath(os.path.join(
-            self.env.env['home_dir'], '../templates')))
-        template = loader.load_template(self.env.env['conf_templ'])
-        conf = template.render(self.env.env)
-        with open(os.path.join(self.env.env['home_dir'],
-                  self.env.env['conf_file']), 'w') as fd:
+        loader  = FileLoader('/')
+        template = loader.load_template(self.env.abs_conf_tmpl())
+        conf = template.render(self.env)
+        with open(self.env.abs_conf_file(), 'w') as fd:
             fd.write(conf)
 
 
     def _destroy(self):
-        shutil.rmtree(self.env.env['home_dir'])
+        shutil.rmtree(self.env['home_dir'])
 
