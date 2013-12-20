@@ -9,13 +9,17 @@ from Commander.NetCatCommander import *
 from Commander.LxcCommander import *
 
 
+os.environ['NETWORK_BASE_DIR'] = '/tmp/commander_test/net/'
+if not os.path.exists(os.environ['NETWORK_BASE_DIR']):
+    os.makedirs(os.environ['NETWORK_BASE_DIR'])
+
+
+
 class LxcCommanderTest(unittest.TestCase):
 
     def __init__(self, arg):
         super(LxcCommanderTest, self).__init__(arg)
-        os.environ['NETWORK_BASE_DIR'] = '/tmp/net/'
-        self.base_dir = os.path.join(os.environ['NETWORK_BASE_DIR'], 'lxc')
-        
+        self.base_dir = os.path.join(os.environ['NETWORK_BASE_DIR'], 'lxc4')
         self.create_template()
        
 
@@ -35,7 +39,8 @@ lxc.network.name = eth0
 lxc.network.ipv4 = @ip
 lxc.network.ipv4.gateway = @gw_ip
 '''
-        template_dir = os.path.join(os.environ['NETWORK_BASE_DIR'],'templates')
+        template_dir = os.path.abspath(os.path.join(
+            os.environ['NETWORK_BASE_DIR'],'../templates'))
         if not os.path.exists(template_dir):
             os.makedirs(template_dir)
         with open(os.path.join(template_dir, 'lxc.conf.tmpl'), 'w') as fd:
@@ -51,7 +56,8 @@ lxc.network.ipv4.gateway = @gw_ip
         
         
     def setUp(self):
-        self.lxc_commander = LxcCommander([NetCatCommander()])
+        self.lxc_commander = LxcCommander(NetCatCommander())
+        self.lxc_commander.env.set_index(4)
         self.lxc_commander._create_home_dir()
 
     def tearDown(self):
@@ -85,8 +91,8 @@ lxc.network.ipv4.gateway = @gw_ip
     def test_configure(self):
         self.lxc_commander.configure()
         self.assertEqual(self.lxc_commander.commanders[0].env['home_dir'],
-                          os.path.join(self.base_dir, 'netcat'))
-        self.assertTrue(os.path.exists(os.path.join(self.base_dir, 'netcat')))
+                          os.path.join(self.base_dir, 'netcat4_0'))
+        self.assertTrue(os.path.exists(os.path.join(self.base_dir, 'netcat4_0')))
 
 if __name__ == '__main__':
     unittest.main()
