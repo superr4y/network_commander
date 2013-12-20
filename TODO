@@ -2,5 +2,6 @@ https://github.com/tony/tmuxp/
 - updating the index (set_index) messes the entire code up
   find a better way of doing it
 - config folder with example networks
-
+- how to create torrc with more then one DA (template)
+- TorNetworkCommander set_index()
 

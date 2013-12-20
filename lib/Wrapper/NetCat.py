@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 import subprocess as sp
 
-import sys, os
-sys.path.append(os.path.abspath('../'))
-from Wrapper.Wrapper import ExecuteOrNot, Debug
+#import sys, os
+#sys.path.append(os.path.abspath('../'))
+from .Wrapper import ExecuteOrNot, Debug
 
 class NetCat:
     def __init__(self):

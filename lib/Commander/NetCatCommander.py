@@ -2,7 +2,7 @@
 from quik import FileLoader
 import quik
 import os, sys, shutil
-sys.path.append(os.path.abspath('../'))
+#sys.path.append(os.path.abspath('../'))
 from Environment.NetCatEnvironment import NetCatEnvironment
 from Wrapper.NetCat import NetCat
 import subprocess as sp

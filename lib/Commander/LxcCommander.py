@@ -9,14 +9,14 @@ from Wrapper.Lxc import Lxc
 
 
 class LxcCommander:
-    def __init__(self, commanders, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
 
         # get all environments from the other commanders
-        envs = [com.env for com in commanders]
+        envs = [com.env for com in args]
 
         self.env = LxcEnvironment(envs=envs)
         self.exe = Lxc(self.env)
-        self.commanders = commanders
+        self.commanders = list(args)
 
         # e.g. /tmp/net/netcat0 => /home/net/lxc/netcat0
         for commander in self.commanders:

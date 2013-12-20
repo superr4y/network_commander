@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from functools import wraps
-
+import os
 
 
 def Debug(func):
@@ -45,6 +45,21 @@ def ExecuteOrNot(func):
             return Popen(cmd, **popen_kwargs)
         else:
             return cmd
+    return wrapper
+
+
+
+def abs_path(func):
+    '''
+    This decorator is only usable for dict object methods
+    like EnvironmentBase and childs
+    '''
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        _self = args[0]
+        home_dir = os.path.abspath(os.path.join(
+            os.environ['NETWORK_BASE_DIR'], _self['home_dir']))
+        return os.path.abspath(os.path.join(home_dir, func(*args, **kwargs)))
     return wrapper
 
 
