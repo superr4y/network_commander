@@ -2,60 +2,62 @@ import sys, os
 sys.path.append(os.path.abspath('lib'))
 os.environ['NETWORK_BASE_DIR'] = os.path.join(os.getcwd(), 'net')
 if not os.path.exists(os.environ['NETWORK_BASE_DIR']):
-    os.mkdir(os.environ['NETWORK_BASE_DIR'])
+    os.makedirs(os.environ['NETWORK_BASE_DIR'])
 
 import argparse
+from functools import wraps
 
 
 ##### config #####
 from Commander.LxcCommander  import LxcCommander
 from Commander.NetCatCommander  import NetCatCommander
 
-lxc1 = LxcCommander([NetCatCommander()])
-lxc2 = LxcCommander([NetCatCommander()])
+lxc1 = LxcCommander(NetCatCommander())
+lxc2 = LxcCommander(NetCatCommander())
 
 commanders = [lxc1, lxc2]
 
 ##### config #####
 
 
+
+def all_commanders(func):
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        print(func.__name__)
+        index = 0
+        for commander in commanders:
+            kwargs['commander'] = commander
+            commander.env.set_index(index)
+            func(*args, **kwargs)
+            index += 1
+    return wrapper
+
+
 class Mode:
-    def configure(self):
-        print('config...')
-        index = 0
-        for commander in commanders:
-            commander.env.set_index(index)
-            commander.configure()
-            index+=1
+    @all_commanders
+    def configure(self, commander=None):
+        commander.configure()
 
+    @all_commanders
     def run(self):
-        print('run...')
-        index = 0
-        for commander in commanders:
-            commander.env.set_index(index)
-            commander.run()
-            index += 1
+        commander.run()
 
-    def stop(self):
-        print('stop...')
-        index = 0
-        for commander in commanders:
-            commander.env.set_index(index)
-            commander.exe.stop() # kill lxc container and everything in it
+    @all_commanders
+    def stop(self, commander=None):
+        # kill lxc container and everything in it
+        commander.exe.stop()
 
-    def info(self):
-        print('info...')
+    @all_commanders
+    def info(self, commander=None):
         #TODO: at the moment, info works only if the commander is a LxcCommander
-        index = 0
-        for commander in commanders:
-            commander.env.set_index(index)
-            msg = '[+] {0} => {1}'.format(commander.env['name'], 
+        msg = '[+] {0} => {1}'.format(commander.env['name'], 
                             'running' if commander.exe._is_running() else 'stopped')
-            print(msg)
-            index += 1
+        print(msg)
 
-    def manage(self):
-        print('manage...')
+    @all_commanders
+    def manage(self, commander=None):
+        print(commander)
 
 
 def main():
