@@ -1,5 +1,6 @@
-import os, sys, shutil
+import os, sys, shutil, time
 sys.path.append(os.path.abspath('../'))
+import subprocess as sp
 
 from tkinter import *
 import tkinter.ttk as ttk
@@ -9,26 +10,62 @@ class CommanderFrame(Frame):
     def __init__(self, master, tree):
         super(CommanderFrame, self).__init__(master)
 
-        ntv = NetworkTreeView(self, tree)
-        ntv.pack(side=LEFT)
+        Label(self, text='Network Tree View', bg='green',
+              font=('Helvetica', 16)).grid(row=0, column=0)
+
+        self.ntv = NetworkTreeView(self, tree, self)
+        self.ntv.grid(row=1, column=0, sticky=NW)
         
-        attach_bt = Button(self, text='attach', command=ntv.attach)
-        attach_bt.pack(side=RIGHT)
+
+        self.scrollbar = Scrollbar(master)
+        self.scrollbar.grid(sticky=E)
+        self.scrollbar.config(command=self.ntv.yview)
+       
+        
+        #self.icon = PhotoImage(file='/home/user/bin/network_commander/BA_Icons.png')
+        # info panel
+        Label(self, text='Info Panel', bg='green', # image=self.icon,
+              font=('Helvetica', 16)).grid(row=0, column=1)
+        kwargs = {'bg': 'white', 'width':30}
+        info_panel = Frame(self, height=50)
+        info_panel.grid(row=1, column=1, sticky=NW)
+
+        self.ip_info = Label(info_panel, text='ip_info', **kwargs)
+        self.state_info = Label(info_panel, text='state_info', **kwargs)
+        self.obj_info = Label(info_panel, text='obj_info', **kwargs)
+        self.ip_info.grid(row=1, column=0, sticky=W)
+        self.state_info.grid(row=2, column=0, sticky=W)
+        self.obj_info.grid(row=3, column=0, sticky=W)
+
+        # control buttons
+        start_bt = Button(self, text='start', command=self.start)
+        stop_bt  = Button(self, text='stop', command=self.stop)
+        start_bt.grid(row=2, column=1)
+        stop_bt.grid(row=2, column=2)
         
         
+
+
+
+    def info_update(self, *args):
+        lxcc = self.ntv.get_selected_container()
+        if lxcc:
+            self.ip_info.configure(text=lxcc.env['ip'])
+
+            state = 'running' if lxcc.exe._is_running() else 'stopped'
+            self.state_info.configure(text=state)
+
+            self.obj_info.configure(text=str(lxcc.commanders[0]))
+            
         
-def main():
+    def start(self):
+        '''
+        TODO: this is just for testing
+        '''
+        sp.Popen('python /home/user/bin/network_commander/commander.py run', shell=True)
 
-
-    tree = {
-        'lxc_0': {'da_0': 'TorDA', 'container': 'Lxc_0'},
-        'lxc_1': {'da_1': 'TorDA', 'container': 'Lxc_1'}
-    }
-
-    root = Tk()
-    frame = CommanderFrame(root, tree)
-    frame.pack()
-
-
-if __name__ == '__main__':
-    main()
+    def stop(self):
+        '''
+        TODO: same as start()
+        '''
+        sp.Popen('python /home/user/bin/network_commander/commander.py stop', shell=True)

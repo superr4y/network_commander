@@ -43,7 +43,9 @@ class TorBaseCommander:
         entry = da_env.torrc_da_entry()
         with open(self.env.abs_conf_file(), 'a') as fd:
             fd.write('\n{0}\n'.format(entry))
-
+    
+    def __str__(self):
+        return type(self).__name__
 
 
 

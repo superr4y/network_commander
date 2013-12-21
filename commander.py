@@ -121,14 +121,10 @@ class Mode:
         pprint.pprint(tree)
         root = Tk()
         frame = CommanderFrame(root, tree)
-        frame.pack()
+        frame.grid(row=0, column=0)
         root.mainloop()
 
             
-        
-        
-    
-
 
 
 

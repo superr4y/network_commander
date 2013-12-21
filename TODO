@@ -6,3 +6,6 @@ https://github.com/tony/tmuxp/
 - commander.py configure => change to normal user
 - TorOnionRouter/Proxy/HiddenService/Bridge/Base-Commander
 - LxcCommander only supports one child, add multi child functionality
+- GUI: layout, update button to get an overview what is running
+- GUI: kill/start single lxc (context menu)
+- I used some static path and username in the code, should fix that

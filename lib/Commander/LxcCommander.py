@@ -58,3 +58,6 @@ class LxcCommander:
     def _destroy(self):
         shutil.rmtree(self.env['home_dir'])
 
+
+    def __str__(self):
+        return type(self).__name__
