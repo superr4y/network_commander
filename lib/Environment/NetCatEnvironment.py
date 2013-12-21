@@ -12,3 +12,9 @@ class NetCatEnvironment(EnvironmentBase):
             
 
     
+    def set_index(self, index, parent_env):
+        folder_name = self['home_dir'].split('/')[-1]
+        self['home_dir'] = '{0}_{1}'.format(
+            os.path.join(parent_env['home_dir'], folder_name), index)
+
+        return index

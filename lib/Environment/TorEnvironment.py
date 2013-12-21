@@ -9,10 +9,9 @@ class TorEnvironment(EnvironmentBase):
     def __init__(self, **kwargs):
         super(TorEnvironment, self).__init__(
             home_dir='tor', conf_file='torrc')
-        keys_folder = 'keys'
         self.update({'tor_bin': 'tor',
                      'tor_gencert_bin': 'tor-gencert',
-                     'keys_folder': keys_folder,
+                     'keys_folder': 'keys',
                      'id_file': 'authority_identity_key',
                      'sk_file': 'authority_signing_key',
                      'cert_file': 'authority_certificate',
@@ -21,7 +20,7 @@ class TorEnvironment(EnvironmentBase):
                      'or_port': 8000,
                      'socks_port': 9050,
                      'control_port': 9051,
-                     'nick_name': 'xxx' # update if set_index(..)
+                     'nick_name': 'xxx'
                  })
         self.update(**kwargs)
 
@@ -65,3 +64,16 @@ class TorEnvironment(EnvironmentBase):
             self.fingerprint_from_cert_file(),
             self['ip'], self['dir_port'], self.fingerprint_from_file())
         return ret
+
+    def set_index(self, index, parent_env):
+        #super(TorEnvironment, self).set_index(index)
+        folder_name = self['home_dir'].split('/')[-1]
+        self['home_dir'] = '{0}_{1}'.format(
+            os.path.join(parent_env['home_dir'], folder_name), index)
+        self['ip'] = parent_env['ip']
+        self['nick_name'] = '{0}{1}'.format(self['nick_name'], index)
+        self['index'] = index
+
+        return index
+        
+        

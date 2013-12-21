@@ -25,6 +25,9 @@ class TorDirectoryAuthorityCommander:
     def configure(self):
         self._create_home_dir()
         self._create_conf_file()
+        self.exe.gen_authority_key(stdin=sp.PIPE).communicate(b'password\n')
+        #self.exe.gen_authority_key(stdin=sp.PIPE).communicate(b'password')
+        self.exe.gen_fingerprint(stdin=sp.PIPE).communicate(b'\n')
 
     def _create_home_dir(self):
         if not os.path.exists(self.env['home_dir']):

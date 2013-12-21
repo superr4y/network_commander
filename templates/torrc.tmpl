@@ -1,0 +1,31 @@
+
+TestingTorNetwork 1
+DataDirectory @home_dir
+RunAsDaemon 1
+ConnLimit 60
+Nickname @nick_name
+ShutdownWaitLength 0
+PidFile @home_dir/pid
+Log notice file @home_dir/notice.log
+Log info file @home_dir/info.log
+ProtocolWarnings 1
+SafeLogging 0
+
+SocksPort @socks_port
+OrPort @or_port
+Address @ip
+ControlPort @control_port
+DirPort @dir_port
+#NOTE: Setting TestingServerConsensusDownloadSchedule doesn't
+#      help -- dl_stats.schedule is not DL_SCHED_CONSENSUS
+#      at boostrap time.
+TestingServerDownloadSchedule 10, 2, 2, 4, 4, 8, 13, 18, 25, 40, 60
+
+AuthoritativeDirectory 1
+V3AuthoritativeDirectory 1
+ContactInfo auth@test.test
+ExitPolicy reject *:*
+TestingV3AuthInitialVotingInterval 300
+TestingV3AuthInitialVoteDelay 2
+TestingV3AuthInitialDistDelay 2
+TestingV3AuthVotingStartOffset 0

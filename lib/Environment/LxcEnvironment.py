@@ -18,13 +18,17 @@ class LxcEnvironment(EnvironmentBase):
         self.update(*args)
 
     def set_index(self, index):
-        super(LxcEnvironment, self).set_index(index)
+        #super(LxcEnvironment, self).set_index(index)
+        self['home_dir'] = '{0}_{1}'.format(self['home_dir'], index)
         ip = '.'.join(self['ip'].split('.')[:3])
         self['ip'] = '{0}.{1}'.format(ip, index+2)
-        self['name'] = '{0}{1}'.format(self['name'], index)
+        self['name'] = '{0}_{1}'.format(self['name'], index)
+        self['index'] = index
 
-        lxc_index = 0
         for env in self.envs:
-            folder_name = env['home_dir'].split('/')[-1]
-            env['home_dir'] = os.path.join(self['home_dir'], folder_name)
-            env.set_index('{0}_{1}'.format(index, lxc_index))
+            # this should not be done here... do it in the other envs
+            #folder_name = env['home_dir'].split('/')[-1]
+            #env['home_dir'] = os.path.join(self['home_dir'], folder_name)
+            index = env.set_index(index, self)
+
+        return index+1

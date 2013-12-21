@@ -4,18 +4,23 @@ os.environ['NETWORK_BASE_DIR'] = os.path.join(os.getcwd(), 'net')
 if not os.path.exists(os.environ['NETWORK_BASE_DIR']):
     os.makedirs(os.environ['NETWORK_BASE_DIR'])
 
-import argparse
+import argparse, traceback
 from functools import wraps
 
 
 ##### config #####
 from Commander.LxcCommander  import LxcCommander
 from Commander.NetCatCommander  import NetCatCommander
+from Commander.TorNetworkCommander import TorNetworkCommander
+from Commander.TorDirectoryAuthorityCommander import TorDirectoryAuthorityCommander
 
-lxc1 = LxcCommander(NetCatCommander())
-lxc2 = LxcCommander(NetCatCommander())
+nc = LxcCommander(NetCatCommander())
+tor_net = TorNetworkCommander(das=[
+    LxcCommander(TorDirectoryAuthorityCommander()),
+    LxcCommander(TorDirectoryAuthorityCommander())
+])
 
-commanders = [lxc1, lxc2]
+commanders = [tor_net, nc]
 
 ##### config #####
 
@@ -27,10 +32,13 @@ def all_commanders(func):
         print(func.__name__)
         index = 0
         for commander in commanders:
+            i = None
             kwargs['commander'] = commander
-            commander.env.set_index(index)
+            if hasattr(commander, 'env'):
+                index = commander.env.set_index(index)
+            else:
+                index = commander.set_index(index)
             func(*args, **kwargs)
-            index += 1
     return wrapper
 
 
@@ -40,20 +48,29 @@ class Mode:
         commander.configure()
 
     @all_commanders
-    def run(self):
+    def run(self, commander=None):
         commander.run()
 
     @all_commanders
     def stop(self, commander=None):
-        # kill lxc container and everything in it
-        commander.exe.stop()
+        if hasattr(commander, 'exe'):
+            # kill lxc container and everything in it
+            commander.exe.stop()
+        elif hasattr(commander, 'stop'):
+            commander.stop()
 
     @all_commanders
     def info(self, commander=None):
         #TODO: at the moment, info works only if the commander is a LxcCommander
-        msg = '[+] {0} => {1}'.format(commander.env['name'], 
+        msg = ''
+        if hasattr(commander, 'env'):
+            msg = '[+] {0} => {1}\n'.format(commander.env['name'], 
                             'running' if commander.exe._is_running() else 'stopped')
-        print(msg)
+        elif hasattr(commander, 'info'):
+            for state in commander.info():
+                msg += '[+] {0} => {1}\n'.format(state[0], 
+                             'running' if state[1] else 'stopped')
+        print(msg, end='')
 
     @all_commanders
     def manage(self, commander=None):
@@ -74,7 +91,8 @@ def main():
         getattr(mode, args.mode)()
     except AttributeError as e:
         parser.print_help()
-        print(e)
+        traceback.print_exc(file=sys.stdout)
+        
 
 
 

@@ -10,7 +10,7 @@ class Tor:
         """abcd
         """
         self.env = env
-        self.tor_start = '{0} -f {1}'
+        self.tor_start = 'su user -c "{0} -f {1}"'
 
     
     @ExecuteOrNot   

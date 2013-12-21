@@ -22,7 +22,3 @@ class EnvironmentBase(dict):
         return os.path.abspath(os.path.join(os.environ['NETWORK_BASE_DIR'],
                             '../templates', self['conf_tmpl']))
 
-    def set_index(self, index):
-        self['index'] = index
-        self['home_dir'] = '{0}{1}'.format(self['home_dir'], index)
-        

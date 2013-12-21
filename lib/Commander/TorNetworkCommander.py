@@ -5,8 +5,8 @@ import quik
 import os, sys, shutil
 from itertools import chain
 #sys.path.append(os.path.abspath('../'))
-from Environment.LxcEnvironment import LxcEnvironment
-from Wrapper.Lxc import Lxc
+from Environment.TorEnvironment import TorEnvironment
+from Wrapper.Tor import Tor
 
 
 class TorNetworkCommander:
@@ -19,7 +19,7 @@ class TorNetworkCommander:
         TorNetworkCommander doesn't have a own environment, the only
         purporse is to manage and hide the complexity from the
         config file.
-        
+
 
         das = [LxcCommander(TorDirecotryAuthorityCommander),..]
         ors = [LxcCommander(TorOnionRouterCommander),..]
@@ -27,18 +27,22 @@ class TorNetworkCommander:
         bs =  [LxcCommander(TorBridgeCommander),..]
         hs  = [LxcCommander(TorHiddenServiceCommander),..]
         '''
-        self.das = das
-        self.ors = ors
-        self.ops = ops
-        self.bs = bs
-        self.hs = hs
-        self.all_nodes = chain(self.das, self.ors, self.ops, self.bs, self.hs)
+        self.das = das if das else []
+        self.ors = ors if ors else []
+        self.ops = ops if ops else []
+        self.bs = bs   if bs  else []
+        self.hs = hs   if hs  else []
+        self.all_nodes = [n for n in chain(self.das, self.ors, self.ops, self.bs, self.hs) if n]
 
 
     def configure(self):
+        for da in self.das:
+            da.configure()
         for node in self.all_nodes:
-            # set_index()???
-            node.configure()
+            for da in self.das:
+                node.commanders[0].update_new_tor_da(da.commanders[0].env)
+            if node not in self.das:
+                node.configure()
 
     def run(self):
         for node in self.all_nodes:
@@ -51,7 +55,16 @@ class TorNetworkCommander:
         '''
         ret = []
         for node in self.all_nodes:
-            ret.append((node.env['name'], node.env._is_running()))
+            ret.append((node.env['name'], node.exe._is_running()))
         return ret
+
+    def stop(self):
+        for node in self.all_nodes:
+            node.exe.stop() # kill lxc container and everything in it
+
+    def set_index(self, index):
+        for node in self.all_nodes:
+            index = node.env.set_index(index)
+        return index
 
 
