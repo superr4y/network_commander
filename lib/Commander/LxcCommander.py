@@ -36,8 +36,11 @@ class LxcCommander:
 
     def tree(self):
         ret = {}
-        ret[str(self.env)] = {'obj': self, str(self.env.envs[0]): self.commanders[0]}
+        ret[str(self.env)] = {'container': self, str(self.env.envs[0]): self.commanders[0]}
         return ret
+
+    def attach(self, **kwargs):
+        return self.exe.attach(**kwargs)
         
 
     def _create_home_dir(self):

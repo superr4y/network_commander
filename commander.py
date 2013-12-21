@@ -4,9 +4,14 @@ os.environ['NETWORK_BASE_DIR'] = os.path.join(os.getcwd(), 'net')
 if not os.path.exists(os.environ['NETWORK_BASE_DIR']):
     os.makedirs(os.environ['NETWORK_BASE_DIR'])
 
+import pprint
 import subprocess as sp
 import argparse, traceback
 from functools import wraps
+
+from tkinter import *
+import tkinter.ttk as ttk
+from Gui.CommanderFrame  import CommanderFrame
 
 
 ##### config #####
@@ -58,7 +63,9 @@ def all_commanders(func):
                 index = commander.set_index(index)
             ret = func(*args, **kwargs)
             if ret:
+                #pprint.pprint(ret)
                 kwargs['ret'] = ret
+        return ret
     return wrapper
 
 
@@ -103,15 +110,23 @@ class Mode:
                 sp.Popen('gnome-terminal')
                 
     @all_commanders
-    def get_tree(self, commander=None, ret=None):
+    def _get_tree(self, commander=None, ret=None):
         if not ret:
             ret = {}
         ret.update(commander.tree())
-        print(ret)
-        print('#'*20)
-        print(ret['lxc_0'])
         return ret
 
+    def gui(self):
+        tree = self._get_tree()
+        pprint.pprint(tree)
+        root = Tk()
+        frame = CommanderFrame(root, tree)
+        frame.pack()
+        root.mainloop()
+
+            
+        
+        
     
 
 
