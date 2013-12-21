@@ -32,3 +32,6 @@ class LxcEnvironment(EnvironmentBase):
             index = env.set_index(index, self)
 
         return index+1
+
+    def __str__(self):
+        return self['name']

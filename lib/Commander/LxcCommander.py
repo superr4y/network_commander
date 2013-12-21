@@ -34,6 +34,12 @@ class LxcCommander:
         cmd = self.commanders[0].run(execute=False)
         self.exe.execute(cmd)
 
+    def tree(self):
+        ret = {}
+        ret[str(self.env)] = {'obj': self, str(self.env.envs[0]): self.commanders[0]}
+        return ret
+        
+
     def _create_home_dir(self):
         if not os.path.exists(self.env['home_dir']):
             os.makedirs(self.env['home_dir'])

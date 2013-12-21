@@ -68,4 +68,9 @@ class TorNetworkCommander:
             index = node.env.set_index(index)
         return index
 
+    def tree(self):
+        ret = {}
+        for node in self.all_nodes:
+            ret.update(node.tree())
+        return ret
 

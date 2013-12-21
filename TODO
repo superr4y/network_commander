@@ -5,4 +5,4 @@ https://github.com/tony/tmuxp/
 - only XCommander should access exe and env
 - commander.py configure => change to normal user
 - TorOnionRouter/Proxy/HiddenService/Bridge/Base-Commander
-- first time configure will fail, something is out of order
+- LxcCommander only supports one child, add multi child functionality

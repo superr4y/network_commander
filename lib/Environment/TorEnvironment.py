@@ -19,6 +19,7 @@ class TorEnvironment(EnvironmentBase):
                      'dir_port': 9000,
                      'or_port': 8000,
                      'socks_port': 9050,
+
                      'control_port': 9051,
                      'nick_name': 'xxx'
                  })
@@ -82,4 +83,5 @@ class TorEnvironment(EnvironmentBase):
 
         return index
         
-        
+    def __str__(self):
+        return self['nick_name']

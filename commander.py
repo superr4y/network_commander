@@ -56,7 +56,9 @@ def all_commanders(func):
                 index = commander.env.set_index(index)
             else:
                 index = commander.set_index(index)
-            func(*args, **kwargs)
+            ret = func(*args, **kwargs)
+            if ret:
+                kwargs['ret'] = ret
     return wrapper
 
 
@@ -100,7 +102,17 @@ class Mode:
                 print('attach {0}'.format(user_input.split(' ')))
                 sp.Popen('gnome-terminal')
                 
-            
+    @all_commanders
+    def get_tree(self, commander=None, ret=None):
+        if not ret:
+            ret = {}
+        ret.update(commander.tree())
+        print(ret)
+        print('#'*20)
+        print(ret['lxc_0'])
+        return ret
+
+    
 
 
 
