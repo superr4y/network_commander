@@ -39,10 +39,11 @@ class TorNetworkCommander:
         for da in self.das:
             da.configure()
         for node in self.all_nodes:
-            for da in self.das:
-                node.commanders[0].update_new_tor_da(da.commanders[0].env)
             if node not in self.das:
                 node.configure()
+            # append all DAs to all torrc
+            for da in self.das:
+                node.commanders[0].update_new_tor_da(da.commanders[0].env)
 
     def run(self):
         for node in self.all_nodes:

@@ -4,6 +4,7 @@ os.environ['NETWORK_BASE_DIR'] = os.path.join(os.getcwd(), 'net')
 if not os.path.exists(os.environ['NETWORK_BASE_DIR']):
     os.makedirs(os.environ['NETWORK_BASE_DIR'])
 
+import subprocess as sp
 import argparse, traceback
 from functools import wraps
 
@@ -13,14 +14,31 @@ from Commander.LxcCommander  import LxcCommander
 from Commander.NetCatCommander  import NetCatCommander
 from Commander.TorNetworkCommander import TorNetworkCommander
 from Commander.TorDirectoryAuthorityCommander import TorDirectoryAuthorityCommander
+from Commander.TorOnionRouterCommander import TorOnionRouterCommander
+from Commander.TorOnionProxyCommander import TorOnionProxyCommander
 
 nc = LxcCommander(NetCatCommander())
-tor_net = TorNetworkCommander(das=[
-    LxcCommander(TorDirectoryAuthorityCommander()),
-    LxcCommander(TorDirectoryAuthorityCommander())
-])
+tor_net = TorNetworkCommander(
+    das=[
+        LxcCommander(TorDirectoryAuthorityCommander()),
+        LxcCommander(TorDirectoryAuthorityCommander())
+    ],
+    ors=[
+        LxcCommander(TorOnionRouterCommander()),
+        LxcCommander(TorOnionRouterCommander())
+    ],
+    ops=[
+        LxcCommander(TorOnionProxyCommander()),
+        LxcCommander(TorOnionProxyCommander())
+    ]
+)
 
 commanders = [tor_net, nc]
+
+#tree = {
+#    'lxc_0':{'obj': lxc_commander_obj, 'da_0': da_commander},
+#    'lxc_1':{...}
+#}
 
 ##### config #####
 
@@ -61,7 +79,6 @@ class Mode:
 
     @all_commanders
     def info(self, commander=None):
-        #TODO: at the moment, info works only if the commander is a LxcCommander
         msg = ''
         if hasattr(commander, 'env'):
             msg = '[+] {0} => {1}\n'.format(commander.env['name'], 
@@ -72,9 +89,20 @@ class Mode:
                              'running' if state[1] else 'stopped')
         print(msg, end='')
 
-    @all_commanders
     def manage(self, commander=None):
-        print(commander)
+        user_input = None
+        while user_input != 'exit':
+            print('>>> ', end='')
+            user_input = input().rstrip()
+            if user_input == 'info':
+                self.info()
+            elif user_input.split(' ')[0] == 'a':
+                print('attach {0}'.format(user_input.split(' ')))
+                sp.Popen('gnome-terminal')
+                
+            
+
+
 
 
 def main():

@@ -53,6 +53,8 @@ def abs_path(func):
     '''
     This decorator is only usable for dict object methods
     like EnvironmentBase and childs
+
+    TODO: is this decorator maybe not needed???
     '''
     @wraps(func)
     def wrapper(*args, **kwargs):
@@ -60,6 +62,19 @@ def abs_path(func):
         home_dir = os.path.abspath(os.path.join(
             os.environ['NETWORK_BASE_DIR'], _self['home_dir']))
         return os.path.abspath(os.path.join(home_dir, func(*args, **kwargs)))
+    return wrapper
+
+def need_index(func):
+    '''
+    This decorator is usable for all XEnvironments. It will throw a exception
+    if index is not set (set_index)
+    '''
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        _self = args[0]
+        if 'index' not in _self.keys():
+            raise Exception('you need to set a index befor you can call this method')
+        return func(*args, **kwargs)
     return wrapper
 
 
