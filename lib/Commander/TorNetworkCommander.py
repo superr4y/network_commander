@@ -59,6 +59,10 @@ class TorNetworkCommander:
             ret.append((node.env['name'], node.exe._is_running()))
         return ret
 
+    def _destroy(self):
+        for node in self.all_nodes:
+            node._destroy()
+
     def stop(self):
         for node in self.all_nodes:
             node.exe.stop() # kill lxc container and everything in it
@@ -72,5 +76,11 @@ class TorNetworkCommander:
         ret = {}
         for node in self.all_nodes:
             ret.update(node.tree())
+        return ret
+
+    def getDns(self):
+        ret = ''
+        for node in self.all_nodes:
+            ret += node.getDns()+'\n'
         return ret
 

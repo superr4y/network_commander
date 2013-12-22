@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 import os
 from .EnvironmentBase import EnvironmentBase
+from Wrapper.Wrapper import need_index
 
-class NetCatEnvironment(EnvironmentBase):
+class HttpEnvironment(EnvironmentBase):
     def __init__(self, *args):
-        super(NetCatEnvironment, self).__init__(
-            home_dir='netcat', conf_file='nc.conf')
-        self.update({'port': '6666'})
+        super(HttpEnvironment, self).__init__(
+            home_dir='http', conf_file='lighttpd.conf')
+        self.update({'port': '80'})
         self.update(*args)
 
             
@@ -20,5 +21,6 @@ class NetCatEnvironment(EnvironmentBase):
 
         return index
 
+    @need_index
     def __str__(self):
-        return 'netcat{0}'.format(self['index'])
+        return 'http{0}'.format(self['index'])

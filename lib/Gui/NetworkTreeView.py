@@ -17,6 +17,7 @@ class NetworkTreeView(ttk.Treeview):
         #self.menu.add_command(label='update', command=self.info_frame.info_update)
         self.menu.add_command(label='attach', command=self.attach_terminal)
         self.menu.add_command(label='wireshark', command=self.attach_wireshark)
+        self.menu.add_command(label='chromium', command=self.attach_chromium)
 
         self.bind('<Button-3>', self.popup)
         self.bind('<ButtonRelease-1>', self.info_frame.info_update)
@@ -27,9 +28,10 @@ class NetworkTreeView(ttk.Treeview):
 
         network = self.insert('', 'end', text='network', open=True)
         for k, v in tree.items():
-            text = k# + str(v['container'].commanders[0])
-            pos = int(re.search(r'\d+', text).group(), 10)
-            lxc_node = self.insert(network, pos, text=text, image=self.icon, open=False)
+            text = v['container'].getDns()
+            print(text)
+            #pos = int(re.search(r'\d+', text).group(), 10)
+            lxc_node = self.insert(network, 'end', text=text, image=self.icon, open=False)
 
             for kk, vv in v.items():
                 if kk == 'container':
@@ -78,6 +80,12 @@ class NetworkTreeView(ttk.Treeview):
         self.xauth_sucker(node)
         cmd = node.attach(execute=False)
         sp.Popen('{0} -- "wireshark"'.format(cmd), shell=True)
+
+    def attach_chromium(self):
+        node = self.get_selected_container()
+        self.xauth_sucker(node)
+        cmd = node.attach(execute=False)
+        sp.Popen('{0} -- su user -c "chromium"'.format(cmd), shell=True)
         
     def popup(self, event):
         if self.get_selected_container(): # is container selected?

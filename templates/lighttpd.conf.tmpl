@@ -1,0 +1,22 @@
+# This is a minimal example config
+# See /usr/share/doc/lighttpd
+# and http://redmine.lighttpd.net/projects/lighttpd/wiki/Docs:ConfigurationOptions
+
+server.port             = @port
+server.username         = "user"
+server.groupname        = "users"
+server.document-root    = "@home_dir/www"
+server.errorlog         = "@home_dir/error.log"
+dir-listing.activate    = "enable"
+index-file.names        = ( "index.html" )
+mimetype.assign         = (
+                                ".html" => "text/html",
+                                ".txt" => "text/plain",
+                                ".css" => "text/css",
+                                ".js" => "application/x-javascript",
+                                ".jpg" => "image/jpeg",
+                                ".jpeg" => "image/jpeg",
+                                ".gif" => "image/gif",
+                                ".png" => "image/png",
+                                "" => "application/octet-stream"
+                        )

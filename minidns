@@ -1,0 +1,103 @@
+#!/usr/bin/env python3
+
+import sys
+import socket
+import fcntl
+import struct
+import argparse
+
+from hexdump import hexdump # for debugging
+
+# DNSQuery class from http://code.activestate.com/recipes/491264-mini-fake-dns-server/
+class DNSQuery:
+  def __init__(self, data):
+    self.data=data
+    self.domain=''
+    #hexdump(self.data[2])
+    tipo = (self.data[2] >> 3) & 15   # Opcode bits
+    if tipo == 0:                     # Standard query
+      ini=12
+      lon=self.data[ini]
+      while lon != 0:
+        self.domain+=self.data[ini+1:ini+lon+1].decode(encoding='utf-8')+'.'
+        ini+=lon+1
+        lon=self.data[ini]
+
+  def respuesta(self, ip):
+    packet=b''
+    if self.domain:
+      end_domain = self.data[12:].decode(encoding='utf-8').find("\x00") + 1 + 12
+      packet+=self.data[:2] + b"\x81\x80"
+      packet+=self.data[4:6] + self.data[4:6] + b'\x00\x00\x00\x00'   # Questions and Answers Counts
+      packet+=self.data[12:end_domain+4]                             # Original Domain Name Question ignore aditional records
+      packet+=b'\xc0\x0c'                                             # Pointer to domain name
+      packet+=b'\x00\x01\x00\x01\x00\x00\x00\x3c\x00\x04'             # Response type, ttl and resource data length -> 4 bytes
+      packet+=str.join('',map(lambda x: chr(int(x)), ip.split('.'))).encode(encoding='utf-8') # 4bytes of IP
+      #hexdump(packet)
+    return packet
+
+
+class Domains:
+  def __init__(self):
+    self.domains = {}
+
+
+  def add_domain(self, ip, domain):
+    self.domains[domain] = ip
+
+
+  def get_ip(self, domain):
+    if domain in self.domains.keys():
+      ip = self.domains[domain]
+    else:
+      ip = None
+    return ip
+
+  def __str__(self):
+    str = ""
+    for k in self.domains:
+      str += "%s => %s\n"%(k, self.domains[k])
+    return str
+
+
+
+if __name__ == '__main__':
+  parser = argparse.ArgumentParser(description='minidns_ray')
+  parser.add_argument('conf', type=str, help='config file')
+
+  args = parser.parse_args()
+  conf_file = args.conf
+
+  ip = None
+  
+  try:
+    udps = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    udps.bind(('',53))
+  except Exception as e:
+    print("Failed to create socket on UDP port 53:", e)
+    sys.exit(1)
+
+  # parse domain.conf and init Domains object
+  domains_obj = Domains()
+  with open(conf_file, 'r') as conf:
+    for line in conf:
+      line = line.rstrip()
+      split_line = line.split(' ')
+      if len(split_line) == 2:
+        domain, ip = split_line
+        domains_obj.add_domain(ip, domain)
+
+  print(domains_obj)
+  
+  try:
+    while 1:
+      data, addr = udps.recvfrom(1024)
+      p=DNSQuery(data)
+      ip = domains_obj.get_ip(p.domain[:-1])
+      if ip == None:
+        ip = '127.0.0.1'
+      udps.sendto(p.respuesta(ip), addr)
+      print('Request: {0} -> {1}'.format(p.domain, ip))
+  except KeyboardInterrupt:
+    print('\nBye!')
+    udps.close()

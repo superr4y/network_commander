@@ -36,7 +36,7 @@ class LxcCommander:
 
     def tree(self):
         ret = {}
-        ret[str(self.env)] = {'container': self, str(self.env.envs[0]): self.commanders[0]}
+        ret[self.getDns()] = {'container': self, str(self.env.envs[0]): self.commanders[0]}
         return ret
 
     def attach(self, **kwargs):
@@ -61,3 +61,7 @@ class LxcCommander:
 
     def __str__(self):
         return type(self).__name__
+
+    def getDns(self):
+        dns = '{0}.lo'.format(self.commanders[0].env.__str__())
+        return '{0} {1}'.format(dns, self.env['ip'])

@@ -27,7 +27,7 @@ class CommanderFrame(Frame):
         Label(self, text='Info Panel', bg='green', # image=self.icon,
               font=('Helvetica', 16)).grid(row=0, column=1)
         kwargs = {'bg': 'white', 'width':30}
-        info_panel = Frame(self, height=50)
+        info_panel = Frame(self)
         info_panel.grid(row=1, column=1, sticky=NW)
 
         self.ip_info = Label(info_panel, text='ip_info', **kwargs)

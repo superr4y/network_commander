@@ -3,7 +3,6 @@ https://github.com/tony/tmuxp/
   find a better way of doing it
 - config folder with example networks
 - only XCommander should access exe and env
-- commander.py configure => change to normal user
 - TorOnionRouter/Proxy/HiddenService/Bridge/Base-Commander
 - LxcCommander only supports one child, add multi child functionality
 - GUI: layout, update button to get an overview what is running

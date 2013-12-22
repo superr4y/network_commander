@@ -21,7 +21,11 @@ from Commander.TorNetworkCommander import TorNetworkCommander
 from Commander.TorDirectoryAuthorityCommander import TorDirectoryAuthorityCommander
 from Commander.TorOnionRouterCommander import TorOnionRouterCommander
 from Commander.TorOnionProxyCommander import TorOnionProxyCommander
+from Commander.DnsCommander import DnsCommander
+from Commander.HttpCommander import HttpCommander
 
+dns = LxcCommander(DnsCommander())
+httpd = LxcCommander(HttpCommander())
 nc = LxcCommander(NetCatCommander())
 tor_net = TorNetworkCommander(
     das=[
@@ -38,8 +42,7 @@ tor_net = TorNetworkCommander(
     ]
 )
 
-commanders = [tor_net, nc]
-
+commanders = [dns, httpd, tor_net, nc]
 #tree = {
 #    'lxc_0':{'obj': lxc_commander_obj, 'da_0': da_commander},
 #    'lxc_1':{...}
@@ -58,10 +61,14 @@ def all_commanders(func):
             i = None
             kwargs['commander'] = commander
             if hasattr(commander, 'env'):
+                # All other Commanders
                 index = commander.env.set_index(index)
             else:
+                # TorNetworkCommander
                 index = commander.set_index(index)
+
             ret = func(*args, **kwargs)
+
             if ret:
                 #pprint.pprint(ret)
                 kwargs['ret'] = ret
@@ -72,10 +79,13 @@ def all_commanders(func):
 class Mode:
     @all_commanders
     def configure(self, commander=None):
+        os.setuid(1000)
         commander.configure()
+        # at that point commander have the right IP and Name
+        dns.commanders[0].addDnsEntry(commander.getDns())
 
     @all_commanders
-    def run(self, commander=None):
+    def start(self, commander=None):
         commander.run()
 
     @all_commanders
@@ -98,17 +108,10 @@ class Mode:
                              'running' if state[1] else 'stopped')
         print(msg, end='')
 
-    def manage(self, commander=None):
-        user_input = None
-        while user_input != 'exit':
-            print('>>> ', end='')
-            user_input = input().rstrip()
-            if user_input == 'info':
-                self.info()
-            elif user_input.split(' ')[0] == 'a':
-                print('attach {0}'.format(user_input.split(' ')))
-                sp.Popen('gnome-terminal')
-                
+    @all_commanders
+    def clear(self, commander=None):
+        commander._destroy()
+
     @all_commanders
     def _get_tree(self, commander=None, ret=None):
         if not ret:
@@ -118,7 +121,7 @@ class Mode:
 
     def gui(self):
         tree = self._get_tree()
-        pprint.pprint(tree)
+        #pprint.pprint(tree)
         root = Tk()
         frame = CommanderFrame(root, tree)
         frame.grid(row=0, column=0)
