@@ -27,7 +27,15 @@ from Commander.DnsCommander import DnsCommander
 from Commander.HttpCommander import HttpCommander
 
 dns = LxcCommander(DnsCommander())
-httpd = LxcCommander(HttpCommander(symlink='/home/user/bin/network_commander/tools/www/www.reddit.com'))
+
+httpd = []
+httpd.append(LxcCommander(HttpCommander(symlink='/home/user/bin/network_commander/tools/www/www.google.de')))
+httpd.append(LxcCommander(HttpCommander(symlink='/home/user/bin/network_commander/tools/www/www.reddit.com')))
+httpd.append(LxcCommander(HttpCommander(symlink='/home/user/bin/network_commander/tools/www/www.ebay.de')))
+httpd.append(LxcCommander(HttpCommander(symlink='/home/user/bin/network_commander/tools/www/www.wikileaks.org')))
+
+
+
 nc = LxcCommander(NetCatCommander())
 tor_net = TorNetworkCommander(
     das=[
@@ -44,7 +52,9 @@ tor_net = TorNetworkCommander(
     ]
 )
 
-commanders = [dns, httpd, tor_net, nc]
+commanders = [dns]
+commanders += httpd
+commanders += [tor_net, nc]
 #tree = {
 #    'lxc_0':{'obj': lxc_commander_obj, 'da_0': da_commander},
 #    'lxc_1':{...}
