@@ -9,7 +9,7 @@ import subprocess as sp
 
 class HttpCommander:
     def __init__(self, *args, **kwargs):
-        self.env = HttpEnvironment()
+        self.env = HttpEnvironment(**kwargs)
         self.exe = Http(self.env)
 
     def configure(self):
@@ -21,7 +21,12 @@ class HttpCommander:
 
     def _create_home_dir(self):
         if not os.path.exists(self.env['home_dir']):
-            os.makedirs(self.env['home_dir']+'/www')
+            os.makedirs(self.env['home_dir'])
+
+        if 'symlink' not in self.env:
+            os.makedirs(os.path.join(self.env['home_dir'], 'www'))
+        else:
+            os.symlink(self.env['symlink'], os.path.join(self.env['home_dir'], 'www'))
 
     def _create_conf_file(self):
         loader  = FileLoader('/')

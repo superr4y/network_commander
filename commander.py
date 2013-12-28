@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import sys, os
 sys.path.append(os.path.abspath('lib'))
 os.environ['NETWORK_BASE_DIR'] = os.path.join(os.getcwd(), 'net')
@@ -25,7 +27,7 @@ from Commander.DnsCommander import DnsCommander
 from Commander.HttpCommander import HttpCommander
 
 dns = LxcCommander(DnsCommander())
-httpd = LxcCommander(HttpCommander())
+httpd = LxcCommander(HttpCommander(symlink='/home/user/bin/network_commander/tools/www/www.reddit.com'))
 nc = LxcCommander(NetCatCommander())
 tor_net = TorNetworkCommander(
     das=[

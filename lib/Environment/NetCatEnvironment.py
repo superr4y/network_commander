@@ -3,11 +3,11 @@ import os
 from .EnvironmentBase import EnvironmentBase
 
 class NetCatEnvironment(EnvironmentBase):
-    def __init__(self, *args):
+    def __init__(self, **kwargs):
         super(NetCatEnvironment, self).__init__(
             home_dir='netcat', conf_file='nc.conf')
         self.update({'port': '6666'})
-        self.update(*args)
+        self.update(**kwargs)
 
             
 

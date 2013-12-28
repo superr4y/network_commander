@@ -62,7 +62,7 @@ class CommanderFrame(Frame):
         '''
         TODO: this is just for testing
         '''
-        sp.Popen('python /home/user/bin/network_commander/commander.py run', shell=True)
+        sp.Popen('python /home/user/bin/network_commander/commander.py start', shell=True)
 
     def stop(self):
         '''

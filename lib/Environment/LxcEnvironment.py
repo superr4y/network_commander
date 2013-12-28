@@ -3,7 +3,7 @@ import os
 from .EnvironmentBase  import EnvironmentBase
 
 class LxcEnvironment(EnvironmentBase):
-    def __init__(self, envs=[], *args):
+    def __init__(self, envs=[], **kwargs):
         super(LxcEnvironment, self).__init__(
             home_dir='lxc',
             conf_file='lxc.conf')
@@ -15,7 +15,7 @@ class LxcEnvironment(EnvironmentBase):
                     'gw_ip': '10.0.0.1',
                     'name': 'lxc'})
 
-        self.update(*args)
+        self.update(**kwargs)
 
     def set_index(self, index):
         #super(LxcEnvironment, self).set_index(index)

@@ -4,11 +4,11 @@ from .EnvironmentBase import EnvironmentBase
 from Wrapper.Wrapper import need_index
 
 class HttpEnvironment(EnvironmentBase):
-    def __init__(self, *args):
+    def __init__(self, **kwargs):
         super(HttpEnvironment, self).__init__(
             home_dir='http', conf_file='lighttpd.conf')
         self.update({'port': '80'})
-        self.update(*args)
+        self.update(**kwargs)
 
             
 
