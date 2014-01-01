@@ -47,6 +47,11 @@ class Tor:
     def run_tor_op(self, **kwargs):
         return self.tor_start.format(self.env['tor_bin'],
                                      self.env.abs_conf_file())
+        
+    @ExecuteOrNot
+    def run_tor_hs(self, **kwargs):
+        return self.tor_start.format(self.env['tor_bin'],
+                                     self.env.abs_conf_file())
 
 
 

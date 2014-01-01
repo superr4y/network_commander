@@ -34,6 +34,10 @@ def ExecuteOrNot(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         cmd = func(*args, **kwargs)
+        
+        if 'cmd' in kwargs:
+            del kwargs['cmd']
+            
         if ('execute' not in kwargs) or ('execute' in kwargs and kwargs['execute']):
             from subprocess import Popen
             if 'shell' not in kwargs:

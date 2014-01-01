@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 from quik import FileLoader
-import subprocess as sp
-import quik
 import os, sys, shutil
 sys.path.append(os.path.abspath('../'))
 from Environment.LxcEnvironment import LxcEnvironment
@@ -33,13 +31,21 @@ class LxcCommander:
     def run(self):
         cmd = self.commanders[0].run(execute=False)
         self.exe.execute(cmd)
+        if len(self.commanders) > 1:
+            for commander in self.commanders[1:]:
+                cmd = '{0}'.format(commander.run(execute=False))
+                self.exe.attach(cmd=cmd)
+                
         
     def stop(self):
         self.exe.stop()
 
     def tree(self):
         ret = {}
-        ret[self.getDns()] = {'container': self, str(self.env.envs[0]): self.commanders[0]}
+        dns = self.getDns()
+        ret[dns] = {'container': self}
+        for commander, env in zip(self.commanders, self.env.envs):
+            ret[dns].update({str(env): commander})
         return ret
 
     def attach(self, **kwargs):

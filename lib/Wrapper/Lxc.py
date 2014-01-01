@@ -34,10 +34,12 @@ class Lxc:
         return cmd
                     
     @ExecuteOrNot
-    def attach(self, **kwargs):
+    def attach(self, cmd=None, **kwargs):
         #cmd = [LXC_PATH+'lxc-attach', '-n', self._lxc_name()]
-        cmd = '{0}lxc-attach -n {1}'.format(LXC_PATH, self._lxc_name())
-        return cmd
+        ret_cmd = '{0}lxc-attach -n {1}'.format(LXC_PATH, self._lxc_name())
+        if cmd:
+            ret_cmd = '{0} -- {1}'.format(ret_cmd, cmd)
+        return ret_cmd
     
     @ExecuteOrNot
     def stop(self, **kwargs):

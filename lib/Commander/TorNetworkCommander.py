@@ -1,8 +1,4 @@
 #!/usr/bin/env python3
-from quik import FileLoader
-import subprocess as sp
-import quik
-import os, sys, shutil
 from itertools import chain
 #sys.path.append(os.path.abspath('../'))
 from Environment.TorEnvironment import TorEnvironment
@@ -56,7 +52,7 @@ class TorNetworkCommander:
         '''
         ret = []
         for node in self.all_nodes:
-            ret.append((node.env['name'], node.exe._is_running()))
+            ret.append((node.env['nick_name'], node.exe._is_running()))
         return ret
 
     def _destroy(self):

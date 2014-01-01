@@ -2,3 +2,5 @@
 *#*
 net/
 tools/www/
+.project
+.pydevproject

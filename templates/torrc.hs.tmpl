@@ -1,0 +1,19 @@
+TestingTorNetwork 1
+DataDirectory @home_dir
+RunAsDaemon 1
+ConnLimit 60
+Nickname @nick_name
+ShutdownWaitLength 0
+PidFile @home_dir/pid
+Log notice file @home_dir/notice.log
+Log info file @home_dir/info.log
+ProtocolWarnings 1
+SafeLogging 0
+
+
+SocksPort @socks_port
+ControlPort @control_port
+#NOTE: Setting TestingClientConsensusDownloadSchedule doesn't
+#      help -- dl_stats.schedule is not DL_SCHED_CONSENSUS
+#      at boostrap time.
+TestingClientDownloadSchedule 10, 2, 2, 4, 4, 8, 13, 18, 25, 40, 60

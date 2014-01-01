@@ -6,8 +6,6 @@ os.environ['NETWORK_BASE_DIR'] = os.path.join(os.getcwd(), 'net')
 if not os.path.exists(os.environ['NETWORK_BASE_DIR']):
     os.makedirs(os.environ['NETWORK_BASE_DIR'])
 
-import pprint
-import subprocess as sp
 import argparse, traceback
 from functools import wraps
 
@@ -23,6 +21,7 @@ from Commander.TorNetworkCommander import TorNetworkCommander
 from Commander.TorDirectoryAuthorityCommander import TorDirectoryAuthorityCommander
 from Commander.TorOnionRouterCommander import TorOnionRouterCommander
 from Commander.TorOnionProxyCommander import TorOnionProxyCommander
+from Commander.TorHiddenServiceCommander import TorHiddenServiceCommander
 from Commander.DnsCommander import DnsCommander
 from Commander.HttpCommander import HttpCommander
 
@@ -53,7 +52,11 @@ tor_net = TorNetworkCommander(
     ops=[
         LxcCommander(TorOnionProxyCommander(nick_name='Alice')),
         LxcCommander(TorOnionProxyCommander())
-    ]
+    ],
+    hs=[
+        LxcCommander(TorHiddenServiceCommander(), 
+                     HttpCommander(symlink='/home/user/bin/network_commander/tools/www/matplotlib.org'))
+        ]
 )
 
 '''
@@ -122,7 +125,7 @@ class Mode:
     def info(self, commander=None):
         msg = ''
         if hasattr(commander, 'env'):
-            msg = '[+] {0} => {1}\n'.format(commander.env['name'], 
+            msg = '[+] {0} => {1}\n'.format(commander.env['nick_name'], 
                             'running' if commander.exe._is_running() else 'stopped')
         elif hasattr(commander, 'info'):
             for state in commander.info():
