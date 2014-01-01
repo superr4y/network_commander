@@ -6,7 +6,7 @@ class NetCatEnvironment(EnvironmentBase):
     def __init__(self, **kwargs):
         super(NetCatEnvironment, self).__init__(
             home_dir='netcat', conf_file='nc.conf')
-        self.update({'port': '6666'})
+        self.update({'port': '6666', 'nick_name': 'netcat'})
         self.update(**kwargs)
 
             

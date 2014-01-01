@@ -8,7 +8,8 @@ class DnsEnvironment(EnvironmentBase):
     def __init__(self, **kwargs):
         super(DnsEnvironment, self).__init__(
             home_dir='dns', conf_file='domain.conf')
-        self.update({'dns_bin': os.path.join(os.getcwd(), 'minidns')})
+        self.update({'dns_bin': os.path.join(os.getcwd(), 'minidns'),
+                     'nick_name': 'dns'})
         self.update(**kwargs)
 
     @need_index

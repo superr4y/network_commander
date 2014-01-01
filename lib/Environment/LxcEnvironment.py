@@ -13,7 +13,7 @@ class LxcEnvironment(EnvironmentBase):
         self.update({
                     'ip': '10.0.0.2',
                     'gw_ip': '10.0.0.1',
-                    'name': 'lxc'})
+                    'nick_name': envs[0]['nick_name']})
 
         self.update(**kwargs)
 
@@ -22,7 +22,7 @@ class LxcEnvironment(EnvironmentBase):
         self['home_dir'] = '{0}_{1}'.format(self['home_dir'], index)
         ip = '.'.join(self['ip'].split('.')[:3])
         self['ip'] = '{0}.{1}'.format(ip, index+2)
-        self['name'] = '{0}_{1}'.format(self['name'], index)
+        self['nick_name'] = '{0}_{1}'.format(self['nick_name'], index)
         self['index'] = index
 
         for env in self.envs:

@@ -21,7 +21,7 @@ class TorEnvironment(EnvironmentBase):
                      'socks_port': 9050,
 
                      'control_port': 9051,
-                     'nick_name': 'xxx'
+                     'nick_name': 'tor'
                  })
         self.update(**kwargs)
 

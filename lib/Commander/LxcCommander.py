@@ -33,6 +33,9 @@ class LxcCommander:
     def run(self):
         cmd = self.commanders[0].run(execute=False)
         self.exe.execute(cmd)
+        
+    def stop(self):
+        self.exe.stop()
 
     def tree(self):
         ret = {}
@@ -40,6 +43,9 @@ class LxcCommander:
         return ret
 
     def attach(self, **kwargs):
+        if not self.exe._is_running():
+            print('{0} is not running execute bash'.format(self.getDns()))
+            self.exe.execute('bash')
         return self.exe.attach(**kwargs)
         
 

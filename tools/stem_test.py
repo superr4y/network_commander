@@ -12,7 +12,10 @@ with Controller.from_port(port=9051) as controller:
     controller.set_conf('MaxOnionsPending', '0')
     controller.set_conf('newcircuitperiod', '999999')
     controller.set_conf('maxcircuitdirtiness', '99999')
-    
+
+    network = { desc.nickname: desc.fingerprint for desc in controller.get_network_statuses()}
+
+
     if args.o == 'close':
         print('close all circuits')
         for circuit in controller.get_circuits():
@@ -20,7 +23,7 @@ with Controller.from_port(port=9051) as controller:
 
     if args.o == 'create':
         print('create new circuit')
-        c_id = controller.extend_circuit(0)
+        c_id = controller.extend_circuit(0, [network['Mallory9'], network['or7'], network['Mallory10']])
         print(c_id)
         
     

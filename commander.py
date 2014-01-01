@@ -29,10 +29,10 @@ from Commander.HttpCommander import HttpCommander
 dns = LxcCommander(DnsCommander())
 
 httpd = []
-httpd.append(LxcCommander(HttpCommander(symlink='/home/user/bin/network_commander/tools/www/www.google.de')))
-httpd.append(LxcCommander(HttpCommander(symlink='/home/user/bin/network_commander/tools/www/www.reddit.com')))
-httpd.append(LxcCommander(HttpCommander(symlink='/home/user/bin/network_commander/tools/www/www.ebay.de')))
-httpd.append(LxcCommander(HttpCommander(symlink='/home/user/bin/network_commander/tools/www/www.wikileaks.org')))
+httpd.append(LxcCommander(HttpCommander(symlink='/home/user/bin/network_commander/tools/www/openbsd.org')))
+httpd.append(LxcCommander(HttpCommander(symlink='/home/user/bin/network_commander/tools/www/wikileaks.org')))
+httpd.append(LxcCommander(HttpCommander(symlink='/home/user/bin/network_commander/tools/www/www.secdev.org')))
+httpd.append(LxcCommander(HttpCommander(symlink='/home/user/bin/network_commander/tools/www/matplotlib.org')))
 
 
 
@@ -44,14 +44,24 @@ tor_net = TorNetworkCommander(
     ],
     ors=[
         LxcCommander(TorOnionRouterCommander()),
-        LxcCommander(TorOnionRouterCommander())
+        LxcCommander(TorOnionRouterCommander()), 
+        LxcCommander(TorOnionRouterCommander(tor_bin='/home/user/bin/tor/src/or/tor',
+                                             nick_name='Mallory')),
+        LxcCommander(TorOnionRouterCommander(tor_bin='/home/user/bin/tor/src/or/tor',
+                                             nick_name='Mallory'))
     ],
     ops=[
-        LxcCommander(TorOnionProxyCommander()),
+        LxcCommander(TorOnionProxyCommander(nick_name='Alice')),
         LxcCommander(TorOnionProxyCommander())
     ]
 )
 
+'''
+commander.py only use the commanders list
+commanders[0] gets 10.0.0.2 as IP address
+commanders[1] gets 10.0.0.3 as IP address
+...
+'''
 commanders = [dns]
 commanders += httpd
 commanders += [tor_net, nc]

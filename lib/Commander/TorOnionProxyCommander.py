@@ -15,7 +15,10 @@ class TorOnionProxyCommander(TorBaseCommander):
         '''
         doc doc doc
         '''
-        super(TorOnionProxyCommander, self).__init__(nick_name='op',
+        if 'nick_name' not in kwargs:
+            kwargs['nick_name'] = 'op'
+
+        super(TorOnionProxyCommander, self).__init__(
                         conf_tmpl='torrc.op.tmpl', **kwargs)
 
     def run(self, **kwargs):

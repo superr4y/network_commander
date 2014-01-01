@@ -15,7 +15,11 @@ class TorOnionRouterCommander(TorBaseCommander):
         '''
         doc doc doc
         '''
-        super(TorOnionRouterCommander, self).__init__(nick_name='or',
+        # TODO: Search for a better way of doing that
+        # 
+        if 'nick_name' not in kwargs:
+            kwargs['nick_name'] = 'or'
+        super(TorOnionRouterCommander, self).__init__(
                         conf_tmpl='torrc.or.tmpl', **kwargs)
 
     def run(self, **kwargs):

@@ -7,7 +7,7 @@ class HttpEnvironment(EnvironmentBase):
     def __init__(self, **kwargs):
         super(HttpEnvironment, self).__init__(
             home_dir='http', conf_file='lighttpd.conf')
-        self.update({'port': '80'})
+        self.update({'port': '80', 'nick_name': 'http'})
         self.update(**kwargs)
 
             

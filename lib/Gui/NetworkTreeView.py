@@ -25,6 +25,9 @@ class NetworkTreeView(ttk.Treeview):
         self.menu.add_command(label='attach', command=self.attach_terminal)
         self.menu.add_command(label='wireshark', command=self.attach_wireshark)
         self.menu.add_command(label='chromium', command=self.attach_chromium)
+        self.menu.add_command(label='start', command=self.start_node)
+        self.menu.add_command(label='stop', command=self.stop_node)
+
 
         self.bind('<Button-3>', self.popup)
         self.bind('<ButtonRelease-1>', self.info_frame.info_update)
@@ -51,7 +54,6 @@ class NetworkTreeView(ttk.Treeview):
 
 
                 
-
 
     def get_selected_container(self):
         try:
@@ -85,7 +87,7 @@ class NetworkTreeView(ttk.Treeview):
         # xterm -bg black -fg white  -e "su user; bash/"
         self.xauth_sucker(node)
         
-        cmd = '{0} -- xterm -bg black -fg white -e "cd {1}; su user; bash"'.format(
+        cmd = '{0} -- xterm -fn 9x15 -bg black -fg white -e "cd {1}; su user; bash"'.format(
             cmd, node.env['home_dir'])
         sp.Popen(cmd, shell=True)
     
@@ -100,6 +102,14 @@ class NetworkTreeView(ttk.Treeview):
         self.xauth_sucker(node)
         cmd = node.attach(execute=False)
         sp.Popen('{0} -- su user -c "chromium"'.format(cmd), shell=True)
+
+    def start_node(self):
+        node = self.get_selected_container()
+        node.run()
+
+    def stop_node(self):
+        node = self.get_selected_container()
+        node.stop()
         
     def popup(self, event):
         if self.get_selected_container(): # is container selected?
