@@ -27,5 +27,11 @@ with Controller.from_port(port=9051) as controller:
         print(c_id)
         
     
-    print(controller.get_info('circuit-status'))
+    #print(controller.get_info('circuit-status'))
+    for circuit in controller.get_circuits():
+        print(circuit.purpose, end=': ')
+        for node in circuit.path[:-1]:
+            # node = (fingerprint, nick_name)
+            print(node, end=' -> ')
+        print(circuit.path[-1][1])
 

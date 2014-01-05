@@ -24,7 +24,7 @@ class NetworkTreeView(ttk.Treeview):
         #self.menu.add_command(label='update', command=self.info_frame.info_update)
         self.menu.add_command(label='attach', command=self.attach_terminal)
         self.menu.add_command(label='wireshark', command=self.attach_wireshark)
-        self.menu.add_command(label='chromium', command=self.attach_chromium)
+        self.menu.add_command(label='firefox', command=self.attach_firefox)
         self.menu.add_command(label='start', command=self.start_node)
         self.menu.add_command(label='stop', command=self.stop_node)
 
@@ -97,11 +97,11 @@ class NetworkTreeView(ttk.Treeview):
         cmd = node.attach(execute=False)
         sp.Popen('{0} -- "wireshark"'.format(cmd), shell=True)
 
-    def attach_chromium(self):
+    def attach_firefox(self):
         node = self.get_selected_container()
         self.xauth_sucker(node)
         cmd = node.attach(execute=False)
-        sp.Popen('{0} -- su user -c "chromium"'.format(cmd), shell=True)
+        sp.Popen('{0} -- su user -c "firefox"'.format(cmd), shell=True)
 
     def start_node(self):
         node = self.get_selected_container()

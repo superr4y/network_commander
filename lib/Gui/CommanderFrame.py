@@ -17,7 +17,7 @@ class CommanderFrame(Frame):
         self.ntv.grid(row=1, column=0, sticky=NW)
         
 
-        self.scrollbar = Scrollbar(master)
+        self.scrollbar = Scrollbar(self)
         self.scrollbar.grid(sticky=E)
         self.scrollbar.config(command=self.ntv.yview)
        

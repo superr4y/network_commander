@@ -25,58 +25,11 @@ from Commander.TorHiddenServiceCommander import TorHiddenServiceCommander
 from Commander.DnsCommander import DnsCommander
 from Commander.HttpCommander import HttpCommander
 
-dns = LxcCommander(DnsCommander())
 
-httpd = []
-httpd.append(LxcCommander(HttpCommander(symlink='/home/user/bin/network_commander/tools/www/openbsd.org')))
-httpd.append(LxcCommander(HttpCommander(symlink='/home/user/bin/network_commander/tools/www/wikileaks.org')))
-httpd.append(LxcCommander(HttpCommander(symlink='/home/user/bin/network_commander/tools/www/www.secdev.org')))
-httpd.append(LxcCommander(HttpCommander(symlink='/home/user/bin/network_commander/tools/www/matplotlib.org')))
+commanders = []
 
 
-
-nc = LxcCommander(NetCatCommander())
-tor_net = TorNetworkCommander(
-    das=[
-        LxcCommander(TorDirectoryAuthorityCommander()),
-        LxcCommander(TorDirectoryAuthorityCommander())
-    ],
-    ors=[
-        LxcCommander(TorOnionRouterCommander()),
-        LxcCommander(TorOnionRouterCommander()), 
-        LxcCommander(TorOnionRouterCommander(tor_bin='/home/user/bin/tor/src/or/tor',
-                                             nick_name='Mallory')),
-        LxcCommander(TorOnionRouterCommander(tor_bin='/home/user/bin/tor/src/or/tor',
-                                             nick_name='Mallory'))
-    ],
-    ops=[
-        LxcCommander(TorOnionProxyCommander(nick_name='Alice')),
-        LxcCommander(TorOnionProxyCommander())
-    ],
-    hs=[
-        LxcCommander(TorHiddenServiceCommander(), 
-                     HttpCommander(symlink='/home/user/bin/network_commander/tools/www/matplotlib.org'))
-        ]
-)
-
-'''
-commander.py only use the commanders list
-commanders[0] gets 10.0.0.2 as IP address
-commanders[1] gets 10.0.0.3 as IP address
-...
-'''
-commanders = [dns]
-commanders += httpd
-commanders += [tor_net, nc]
-#tree = {
-#    'lxc_0':{'obj': lxc_commander_obj, 'da_0': da_commander},
-#    'lxc_1':{...}
-#}
-
-##### config #####
-
-
-
+#TODO: this decorator sucks, get rid of it
 def all_commanders(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
@@ -107,7 +60,8 @@ class Mode:
         os.setuid(1000)
         commander.configure()
         # at that point commander have the right IP and Name
-        dns.commanders[0].addDnsEntry(commander.getDns())
+        # commanders[0] = dns
+        commanders[0].commanders[0].addDnsEntry(commander.getDns())
 
     @all_commanders
     def start(self, commander=None):
@@ -152,19 +106,33 @@ class Mode:
         frame.grid(row=0, column=0)
         root.mainloop()
 
-            
+
+       
+       
+
+    
+
+
+     
 
 
 
 def main():
     mode = Mode()
+    
     parser = argparse.ArgumentParser(description='One Commander to rule them all')
     parser.add_argument('mode', type=str,
-                        help='posible modes are [{0}]'.format(', '.join(
+                    help='posible modes are [{0}]'.format(', '.join(
                             (f for f in Mode.__dict__ if f[0] != '_')
-                            )))
+                    )))
+    parser.add_argument('-f', type=str, help='config file default = conf/config.py',
+                    default='conf/config.py')
 
     args = parser.parse_args()
+
+    with open(args.f, 'r') as fd:
+        # redefine commanders list
+        exec(fd.read())
     
     try:
         getattr(mode, args.mode)()
