@@ -4,3 +4,5 @@ net/
 tools/www/
 .project
 .pydevproject
+tags
+*.swp

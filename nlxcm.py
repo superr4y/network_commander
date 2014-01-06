@@ -110,13 +110,6 @@ class Mode:
        
        
 
-    
-
-
-     
-
-
-
 def main():
     mode = Mode()
     

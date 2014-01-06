@@ -8,13 +8,13 @@ from Gui.NetworkTreeView import NetworkTreeView
 
 class CommanderFrame(Frame):
     def __init__(self, master, tree):
-        super(CommanderFrame, self).__init__(master)
+        super(CommanderFrame, self).__init__(master, bg='cyan')
 
         Label(self, text='Network Tree View', bg='green',
               font=('Helvetica', 16)).grid(row=0, column=0)
 
         self.ntv = NetworkTreeView(self, tree, self)
-        self.ntv.grid(row=1, column=0, sticky=NW)
+        self.ntv.grid(row=1, column=0, )
         
 
         self.scrollbar = Scrollbar(self)
@@ -22,7 +22,6 @@ class CommanderFrame(Frame):
         self.scrollbar.config(command=self.ntv.yview)
        
         
-        #self.icon = PhotoImage(file='/home/user/bin/network_commander/BA_Icons.png')
         # info panel
         Label(self, text='Info Panel', bg='green', # image=self.icon,
               font=('Helvetica', 16)).grid(row=0, column=1)
@@ -62,10 +61,10 @@ class CommanderFrame(Frame):
         '''
         TODO: this is just for testing
         '''
-        sp.Popen('python /home/user/bin/network_commander/commander.py start', shell=True)
+        sp.Popen('python /home/user/bin/nlxcm/nlxcm.py start', shell=True)
 
     def stop(self):
         '''
         TODO: same as start()
         '''
-        sp.Popen('python /home/user/bin/network_commander/commander.py stop', shell=True)
+        sp.Popen('python /home/user/bin/nlxcm/nlxcm.py stop', shell=True)

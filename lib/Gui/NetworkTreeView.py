@@ -33,7 +33,7 @@ class NetworkTreeView(ttk.Treeview):
         self.bind('<ButtonRelease-1>', self.info_frame.info_update)
 
         #TODO: don't use static path
-        self.icon = PhotoImage(file='/home/user/bin/network_commander/lib/Gui/tor.gif')
+        self.icon = PhotoImage(file='/home/user/bin/nlxcm/lib/Gui/tor.gif')
         self.icon = self.icon.subsample(5)
 
 
