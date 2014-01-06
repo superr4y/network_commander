@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 from quik import FileLoader
+from collections import OrderedDict
 import os, sys, shutil
 sys.path.append(os.path.abspath('../'))
 from Environment.LxcEnvironment import LxcEnvironment
@@ -41,7 +42,7 @@ class LxcCommander:
         self.exe.stop()
 
     def tree(self):
-        ret = {}
+        ret = OrderedDict()
         dns = self.getDns()
         ret[dns] = {'container': self}
         for commander, env in zip(self.commanders, self.env.envs):
@@ -58,6 +59,9 @@ class LxcCommander:
     def _create_home_dir(self):
         if not os.path.exists(self.env['home_dir']):
             os.makedirs(self.env['home_dir'])
+            os.symlink(os.path.join(self.env['home_dir'], '../../tools'),
+                    os.path.join(self.env['home_dir'],'tools'))
+
 
     def _create_conf_file(self):
         loader  = FileLoader('/')

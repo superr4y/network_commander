@@ -13,7 +13,7 @@ from Commander.HttpCommander import HttpCommander
 
 class NetworkTreeView(ttk.Treeview):
     def __init__(self, master, tree, info_frame):
-        super(NetworkTreeView, self).__init__(master)
+        super(NetworkTreeView, self).__init__(master, height=20)
 
         self.tree = tree
         self.info_frame = info_frame

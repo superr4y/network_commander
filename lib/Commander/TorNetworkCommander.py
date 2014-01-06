@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 from itertools import chain
+from collections import OrderedDict
 #sys.path.append(os.path.abspath('../'))
 from Environment.TorEnvironment import TorEnvironment
 from Wrapper.Tor import Tor
+import os
 
 
 class TorNetworkCommander:
@@ -69,7 +71,7 @@ class TorNetworkCommander:
         return index
 
     def tree(self):
-        ret = {}
+        ret = OrderedDict()
         for node in self.all_nodes:
             ret.update(node.tree())
         return ret
@@ -79,4 +81,10 @@ class TorNetworkCommander:
         for node in self.all_nodes:
             ret += node.getDns()+'\n'
         return ret
+
+    def gen_data(self):
+        for op in self.ops:
+            cmd = 'bash -c "cd {0}; python gen_data.py"'.format(
+                    os.path.join(op.env['home_dir'], 'tools'))
+            op.exe.attach(cmd=cmd)
 

@@ -8,6 +8,7 @@ if not os.path.exists(os.environ['NETWORK_BASE_DIR']):
 
 import argparse, traceback
 from functools import wraps
+from collections import OrderedDict
 
 from tkinter import *
 import tkinter.ttk as ttk
@@ -94,7 +95,7 @@ class Mode:
     @all_commanders
     def _get_tree(self, commander=None, ret=None):
         if not ret:
-            ret = {}
+            ret = OrderedDict()
         ret.update(commander.tree())
         return ret
 
@@ -105,6 +106,11 @@ class Mode:
         frame = CommanderFrame(root, tree)
         frame.grid(row=0, column=0)
         root.mainloop()
+
+    @all_commanders
+    def gen_data(self, commander=None):
+        if isinstance(commander, TorNetworkCommander):
+            commander.gen_data()
 
 
        
