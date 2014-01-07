@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+<meta http-equiv="Pragma" content="no-cache"/>
+<meta http-equiv="Expires" content="0"/>
+
+<script>
+
+var pattern = new Array(1000, 500, 1500, 1000, 500, 1000, 1500, 800, 500, 5000);
+var counter = 0;
+
+function loadXMLDoc()
+{
+  var xmlhttp = new XMLHttpRequest();
+  xmlhttp.open("POST","/",true);
+  xmlhttp.send("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa=bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
+
+  timeOut = pattern[counter]
+  counter = (counter + 1) % pattern.length;
+  document.getElementById("myDiv").innerHTML=timeOut;
+  setTimeout(loadXMLDoc, timeOut);
+}
+setTimeout(loadXMLDoc, 2000);
+</script>
+</head>
+<body>
+  <h2>Attacker</h2>
+  <div id="myDiv"></div>
+</body>
+</html>

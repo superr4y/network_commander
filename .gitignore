@@ -6,3 +6,5 @@ tools/www/
 .pydevproject
 tags
 *.swp
+*.log
+tools/circuits/*

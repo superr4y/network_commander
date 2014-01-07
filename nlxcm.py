@@ -56,6 +56,10 @@ def all_commanders(func):
 
 
 class Mode:
+    
+    def __init__(self, conf_file):
+        self.conf_file = conf_file
+
     @all_commanders
     def configure(self, commander=None):
         os.setuid(1000)
@@ -103,7 +107,7 @@ class Mode:
         tree = self._get_tree()
         #pprint.pprint(tree)
         root = Tk()
-        frame = CommanderFrame(root, tree)
+        frame = CommanderFrame(root, tree, self.conf_file)
         frame.grid(row=0, column=0)
         root.mainloop()
 
@@ -117,7 +121,6 @@ class Mode:
        
 
 def main():
-    mode = Mode()
     
     parser = argparse.ArgumentParser(description='One Commander to rule them all')
     parser.add_argument('mode', type=str,
@@ -128,6 +131,7 @@ def main():
                     default='conf/config.py')
 
     args = parser.parse_args()
+    mode = Mode(args.f)
 
     with open(args.f, 'r') as fd:
         # redefine commanders list

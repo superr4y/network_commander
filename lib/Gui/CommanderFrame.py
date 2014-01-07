@@ -7,8 +7,10 @@ import tkinter.ttk as ttk
 from Gui.NetworkTreeView import NetworkTreeView
 
 class CommanderFrame(Frame):
-    def __init__(self, master, tree):
+    def __init__(self, master, tree, conf_file):
         super(CommanderFrame, self).__init__(master)
+
+        self.conf_file = conf_file
 
         Label(self, text='Network Tree View', bg='green',
               font=('Helvetica', 16)).grid(row=0, column=0,
@@ -68,19 +70,13 @@ class CommanderFrame(Frame):
             
         
     def start(self):
-        '''
-        TODO: this is just for testing
-        '''
-        sp.Popen('python /home/user/bin/nlxcm/nlxcm.py start', shell=True)
+        sp.Popen("python nlxcm.py -f {0} start".format(self.conf_file), shell=True)
 
     def stop(self):
-        '''
-        TODO: same as start()
-        '''
-        sp.Popen('python /home/user/bin/nlxcm/nlxcm.py stop', shell=True)
+        sp.Popen("python nlxcm.py -f {0} stop".format(self.conf_file), shell=True)
 
     def gen_data(self):
-        sp.Popen('python /home/user/bin/nlxcm/nlxcm.py gen_data', shell=True)
+        sp.Popen("python nlxcm.py -f {0} gen_data".format(self.conf_file), shell=True)
 
     def stop_gen_data(self):
         sp.Popen('kill $(ps aux | grep -v grep | grep "python gen_data.py" | awk \'{print $2}\')', shell=True)
