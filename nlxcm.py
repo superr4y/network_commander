@@ -124,7 +124,7 @@ def main():
     
     parser = argparse.ArgumentParser(description='One Commander to rule them all')
     parser.add_argument('mode', type=str,
-                    help='posible modes are [{0}]'.format(', '.join(
+                    help='possible modes are [{0}]'.format(', '.join(
                             (f for f in Mode.__dict__ if f[0] != '_')
                     )))
     parser.add_argument('-f', type=str, help='config file default = conf/config.py',

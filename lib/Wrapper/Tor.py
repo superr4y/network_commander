@@ -22,6 +22,7 @@ class Tor:
             self.env['tor_gencert_bin'], self.env.abs_id_file(),
             self.env.abs_sk_file(), self.env.abs_cert_file(),
             self.env['ip'], self.env['dir_port'])
+        print(cmd)
         return cmd
 
     @ExecuteOrNot
@@ -30,6 +31,7 @@ class Tor:
             self.env['tor_bin'], self.env.abs_conf_file(),
             self.env['nick_name'], self.env['ip'],
             self.env['dir_port'], self.env.fingerprint_from_cert_file())
+        print(cmd)
         return cmd
 
     @ExecuteOrNot

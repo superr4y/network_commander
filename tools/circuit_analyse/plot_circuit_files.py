@@ -42,12 +42,12 @@ def main():
     count = 1
     labels = ['']
     score_list = []
-    with open('score.txt', 'r') as fd:
-        for line in fd:
-            score_list.append(line)
-    for x in partitionate_heigh_score_circuits(score_list):
-        print(x)
-"""    
+    """    with open('score.txt', 'r') as fd:
+            for line in fd:
+                score_list.append(line)
+        for x in partitionate_heigh_score_circuits(score_list):
+            print(x)
+    """    
     for file in files:
         print('parse file {0}'.format(file))
         X = parse_time_from_file('../circuits/{0}'.format(file))
@@ -55,11 +55,13 @@ def main():
         plt.plot(X, Y, 'bo')
         count += 1
         match = re.match(r'm(\d+)_circuit_(\d+).log', file)
+        #match = re.match(r'circuit_(\d+).log', file)
         labels.append('Mallory'+match.group(1)+'->'+match.group(2))
+        #labels.append('Mallory -> '+match.group(1))
     
 
     plt.ylim([0, count])
-    plt.yticks(range(count), labels)
+    plt.yticks(range(count), labels, fontsize=15)
     plt.grid(True)
     plt.xlabel('Time in ms', fontsize=20)
     plt.ylabel('Circuit IDs', fontsize=20)
@@ -69,7 +71,6 @@ def main():
     #ax.legend([p1, p2], ['Mallory9', 'Mallory10'])
 
     plt.show()    
-"""
     
 if __name__ == '__main__':
     main()

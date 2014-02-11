@@ -15,7 +15,7 @@ with Controller.from_port(port=9051) as controller:
     controller.set_conf('maxcircuitdirtiness', '99999')
 
     network = { desc.nickname: desc.fingerprint for desc in controller.get_network_statuses()}
-    print(network)
+    #print(network)
 
 
     if args.o == 'close':
@@ -25,10 +25,10 @@ with Controller.from_port(port=9051) as controller:
 
     if args.o == 'create':
         print('create new circuit')
-        #c_id = controller.extend_circuit(0, [network['Mallory9'], network['or7'], network['Mallory10']])
+        c_id = controller.extend_circuit(0, [network['Mallory17'], network['or15'], network['Mallory18']])
 
         # Malicious Exit Node Test Network
-        c_id = controller.extend_circuit(0, [network['or4'], network['or5'], network['Mallory8']])
+        #c_id = controller.extend_circuit(0, [network['or4'], network['or5'], network['Mallory8']])
 
         print(c_id)
         

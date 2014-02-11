@@ -1,10 +1,10 @@
 dns = LxcCommander(DnsCommander())
 
 httpd = []
-httpd.append(LxcCommander(HttpCommander(symlink='/home/user/bin/network_commander/tools/www/openbsd.org')))
-httpd.append(LxcCommander(HttpCommander(symlink='/home/user/bin/network_commander/tools/www/wikileaks.org')))
-httpd.append(LxcCommander(HttpCommander(symlink='/home/user/bin/network_commander/tools/www/www.secdev.org')))
-httpd.append(LxcCommander(HttpCommander(symlink='/home/user/bin/network_commander/tools/www/matplotlib.org')))
+httpd.append(LxcCommander(HttpCommander(symlink='/home/user/bin/nlxcm/tools/www/openbsd.org')))
+httpd.append(LxcCommander(HttpCommander(symlink='/home/user/bin/nlxcm/tools/www/wikileaks.org')))
+httpd.append(LxcCommander(HttpCommander(symlink='/home/user/bin/nlxcm/tools/www/www.secdev.org')))
+httpd.append(LxcCommander(HttpCommander(symlink='/home/user/bin/nlxcm/tools/www/matplotlib.org')))
 
 
 
@@ -25,68 +25,15 @@ tor_net = TorNetworkCommander(
         LxcCommander(TorOnionRouterCommander()),
         LxcCommander(TorOnionRouterCommander()),
         LxcCommander(TorOnionRouterCommander()),
-                LxcCommander(TorOnionRouterCommander()),
-        LxcCommander(TorOnionRouterCommander()),
-        LxcCommander(TorOnionRouterCommander()),
-        LxcCommander(TorOnionRouterCommander()),
-        LxcCommander(TorOnionRouterCommander()),
-        LxcCommander(TorOnionRouterCommander()),
-        LxcCommander(TorOnionRouterCommander()),
-        LxcCommander(TorOnionRouterCommander()),
-                LxcCommander(TorOnionRouterCommander()),
-        LxcCommander(TorOnionRouterCommander()),
-        LxcCommander(TorOnionRouterCommander()),
-        LxcCommander(TorOnionRouterCommander()),
-        LxcCommander(TorOnionRouterCommander()),
-        LxcCommander(TorOnionRouterCommander()),
-        LxcCommander(TorOnionRouterCommander()),
-        LxcCommander(TorOnionRouterCommander()),
-                LxcCommander(TorOnionRouterCommander()),
-        LxcCommander(TorOnionRouterCommander()),
-        LxcCommander(TorOnionRouterCommander()),
-        LxcCommander(TorOnionRouterCommander()),
-        LxcCommander(TorOnionRouterCommander()),
-        LxcCommander(TorOnionRouterCommander()),
-        LxcCommander(TorOnionRouterCommander()),
-        LxcCommander(TorOnionRouterCommander()),
-                LxcCommander(TorOnionRouterCommander()),
-        LxcCommander(TorOnionRouterCommander()),
-        LxcCommander(TorOnionRouterCommander()),
-        LxcCommander(TorOnionRouterCommander()),
-        LxcCommander(TorOnionRouterCommander()),
-        LxcCommander(TorOnionRouterCommander()),
-        LxcCommander(TorOnionRouterCommander()),
-        LxcCommander(TorOnionRouterCommander()),
-                LxcCommander(TorOnionRouterCommander()),
-        LxcCommander(TorOnionRouterCommander()),
-        LxcCommander(TorOnionRouterCommander()),
-        LxcCommander(TorOnionRouterCommander()),
-        LxcCommander(TorOnionRouterCommander()),
-        LxcCommander(TorOnionRouterCommander()),
-        LxcCommander(TorOnionRouterCommander()),
-        LxcCommander(TorOnionRouterCommander()),
         LxcCommander(TorOnionRouterCommander(tor_bin='/home/user/bin/tor/src/or/tor',
                                              nick_name='Mallory')),
         LxcCommander(TorOnionRouterCommander(tor_bin='/home/user/bin/tor/src/or/tor',
                                              nick_name='Mallory'))
     ],
     ops=[
-        LxcCommander(TorOnionProxyCommander(nick_name='Alice')), #tor_bin='/home/user/bin/tor/src/or/tor')),
+        LxcCommander(TorOnionProxyCommander(nick_name='Alice')),
         LxcCommander(TorOnionProxyCommander()),
         LxcCommander(TorOnionProxyCommander()),
-        LxcCommander(TorOnionProxyCommander()),
-        LxcCommander(TorOnionProxyCommander()),
-        LxcCommander(TorOnionProxyCommander()),
-        LxcCommander(TorOnionProxyCommander()),
-        LxcCommander(TorOnionProxyCommander()),
-                LxcCommander(TorOnionProxyCommander()),
-        LxcCommander(TorOnionProxyCommander()),
-        LxcCommander(TorOnionProxyCommander()),
-        LxcCommander(TorOnionProxyCommander()),
-        LxcCommander(TorOnionProxyCommander()),
-        LxcCommander(TorOnionProxyCommander()),
-        LxcCommander(TorOnionProxyCommander()),
-                LxcCommander(TorOnionProxyCommander()),
         LxcCommander(TorOnionProxyCommander()),
         LxcCommander(TorOnionProxyCommander()),
         LxcCommander(TorOnionProxyCommander()),
