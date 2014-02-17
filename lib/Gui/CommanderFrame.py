@@ -70,13 +70,13 @@ class CommanderFrame(Frame):
             
         
     def start(self):
-        sp.Popen("python nlxcm.py -f {0} start".format(self.conf_file), shell=True)
+        sp.Popen("python3 nlxcm.py -f {0} start".format(self.conf_file), shell=True)
 
     def stop(self):
-        sp.Popen("python nlxcm.py -f {0} stop".format(self.conf_file), shell=True)
+        sp.Popen("python3 nlxcm.py -f {0} stop".format(self.conf_file), shell=True)
 
     def gen_data(self):
-        sp.Popen("python nlxcm.py -f {0} gen_data".format(self.conf_file), shell=True)
+        sp.Popen("python3 nlxcm.py -f {0} gen_data".format(self.conf_file), shell=True)
 
     def stop_gen_data(self):
         sp.Popen('kill $(ps aux | grep -v grep | grep "python gen_data.py" | awk \'{print $2}\')', shell=True)

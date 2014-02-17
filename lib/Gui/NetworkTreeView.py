@@ -101,6 +101,7 @@ class NetworkTreeView(ttk.Treeview):
         node = self.get_selected_container()
         self.xauth_sucker(node)
         cmd = node.attach(execute=False)
+        #  TODO: user is not dynamic
         sp.Popen('{0} -- su user -c "firefox"'.format(cmd), shell=True)
 
     def start_node(self):
