@@ -39,7 +39,6 @@ class TorBaseCommander:
             fd.write(conf)
 
     def update_new_tor_da(self, da_env):
-        # This should be in TorCommanderBase
         entry = da_env.torrc_da_entry()
         with open(self.env.abs_conf_file(), 'a') as fd:
             fd.write('\n{0}\n'.format(entry))
