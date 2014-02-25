@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
 from stem.control import Controller
 import argparse
+import sys
 
 
-parser = argparse.ArgumentParser(description='stem controller script')
-parser.add_argument('-o', type=str, help='o=[close, create...]')
-args = parser.parse_args()
 
 with Controller.from_port(port=9051) as controller:
     controller.authenticate()
@@ -15,22 +13,15 @@ with Controller.from_port(port=9051) as controller:
     controller.set_conf('maxcircuitdirtiness', '99999')
 
     network = { desc.nickname: desc.fingerprint for desc in controller.get_network_statuses()}
-    #print(network)
 
+    print('close all circuits')
+    for circuit in controller.get_circuits():
+        controller.close_circuit(circuit.id)
 
-    if args.o == 'close':
-        print('close all circuits')
-        for circuit in controller.get_circuits():
-            controller.close_circuit(circuit.id)
-
-    if args.o == 'create':
+    if(len(sys.argv) == 4):
         print('create new circuit')
-        #c_id = controller.extend_circuit(0, [network['Mallory17'], network['or15'], network['Mallory18']])
-
-        # Malicious Exit Node Test Network
-        c_id = controller.extend_circuit(0, [network['Mallory17'], network['or11'], 
-            network['Mallory18']])
-
+        c_id = controller.extend_circuit(0, [
+            network[sys.argv[1].rstrip()], network[sys.argv[2].rstrip()], network[sys.argv[3].rstrip()]])
         print(c_id)
         
     

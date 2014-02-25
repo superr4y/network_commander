@@ -15,6 +15,7 @@ tor_net = TorNetworkCommander(
                                              nick_name='Mallory'))
     ],
     ops=[ LxcCommander(TorOnionProxyCommander(nick_name='Alice')) ]
+
    )
 
 global commanders

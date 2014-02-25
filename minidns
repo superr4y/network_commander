@@ -85,7 +85,7 @@ if __name__ == '__main__':
       split_line = line.split(' ')
       if len(split_line) == 2:
         domain, ip = split_line
-        domains_obj.add_domain(ip, domain)
+        domains_obj.add_domain(ip, domain.lower())
 
   print(domains_obj)
   
@@ -93,7 +93,7 @@ if __name__ == '__main__':
     while 1:
       data, addr = udps.recvfrom(1024)
       p=DNSQuery(data)
-      ip = domains_obj.get_ip(p.domain[:-1])
+      ip = domains_obj.get_ip(p.domain[:-1].lower())
       if ip == None:
         ip = '127.0.0.1'
       udps.sendto(p.respuesta(ip), addr)
